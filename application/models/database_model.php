@@ -35,6 +35,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             return false;
 
        }
+
+       function getUserInformation($username,$password){
+         $this->db->select('`Username`, `UserType`,`UserID`');
+         $this->db->from("iUsers");
+         $this->db->where("(Username='".$username."' OR Email='".$username."') AND Password='".$password."' ");
+         $query = $this->db->get();
+         return $query->result();
+       }
        
        function DeleteStation($parm){
          $this->db->where('stationID', $parm);

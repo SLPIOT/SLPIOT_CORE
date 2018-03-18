@@ -52,13 +52,17 @@ File: Menu
 }
 .user-box {
   text-align: center;
-  padding: 30px 0px 20px 0px;
+  padding: 0px 0px 20px 0px;
 }
 .user-box .user-img {
   position: relative;
   height: 88px;
   width: 88px;
   margin: 0px auto;
+}
+
+.user-box h3 {
+  color: #253138;
 }
 .user-box h5 a {
   color: #98a6ad;
