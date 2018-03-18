@@ -35,5 +35,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             return $this;
         }
 
+        public function getReadableStations($userid){
+            $this->load->database();
+            $this->load->model("database_model");
+            return $this->database_model->getStations($userid);
+            
+        }
+
    }  
 ?>

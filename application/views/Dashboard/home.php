@@ -3,10 +3,20 @@
                 <!-- Start content -->
                 <div class="content">
                     <div class="container">
-
+                    
+                    <div class="col-lg-4">
+                      <select class="form-control select2" id="station_list">
+                            <option value=<?php echo base_url().'Dashboard';?>>Select</option>
+                            <?php
+                                foreach($stations as $station){
+                                    echo '<option value="'.base_url().'Dashboard/Station/'.$station->stationid.'">'.$station->name.'</option>';
+                                }
+                            ?>            
+                      </select>
+                    </div>
                         
 
-                        <div class="row">
+                        <!-- <div class="row">
 							<div class="col-lg-12">
 								<div class="card-box">
                                     
@@ -15,8 +25,8 @@
 
 									<div id="world-map-markers" style="height: 500px"></div>
 								</div>
-							</div><!-- end col -->
-						</div>
+							</div>
+						</div> -->
 
                     </div> <!-- container -->
 

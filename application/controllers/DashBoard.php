@@ -37,14 +37,15 @@ class DashBoard extends CI_Controller {
 		if(!$this->getUserSessionEnabled()){
 			redirect(base_url().'Login');	
 		}else{
+
+			$data['stations'] = $this->getReadableStations($_SESSION['userid']);
 			$this->load->view('Templete/header.php',$data);
 			$this->load->view('Templete/title.php');
 			$this->load->view('Templete/left_slide.php');
-			$this->load->view('Dashboard/home');
+			$this->load->view('Dashboard/home',$data);
 			$this->load->view('Templete/footer.php');
 		}		
 		
-
 
 	}
 
@@ -65,6 +66,16 @@ class DashBoard extends CI_Controller {
 		}else{
 			return false;
 		}
+	}
+
+	private function getReadableStations($userid){
+		$this->load->model("User_Model");
+		return $this->User_Model->getReadableStations($userid);
+
+	}
+
+	public function Station($url){
+		echo $url;
 	}
 	
 }

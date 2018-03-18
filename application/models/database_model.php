@@ -36,6 +36,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
        }
 
+       function DeleteStation($parm){
+        $this->db->where('stationID', $parm);
+        $r = $this->db->delete('tstations');
+        if($r)
+           return true;
+        else
+           return false;
+
+      }
+
+       // User model functions
        function getUserInformation($username,$password){
          $this->db->select('`Username`, `UserType`,`UserID`');
          $this->db->from("iUsers");
@@ -43,16 +54,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
          $query = $this->db->get();
          return $query->result();
        }
-       
-       function DeleteStation($parm){
-         $this->db->where('stationID', $parm);
-         $r = $this->db->delete('tstations');
-         if($r)
-            return true;
-         else
-            return false;
 
+       function getStations($userId){
+        $this->db->select('`tstationuser.stationid`, `tstations.name`');
+        $this->db->from("tstations");
+        $this->db->join("tstationuser","tstationuser.stationid = tstations.stationID", "right");
+        $this->db->where("tstationuser.userid ='".$userId."'");
+        $query = $this->db->get();
+        return $query->result();
        }
+
+       
        function createTable($tablename,$patameterList){
 
 

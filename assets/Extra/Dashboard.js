@@ -6,6 +6,11 @@
  * VectorMap
  */
 
+ $('#station_list').change(function(){
+     if($(this).val() != null)
+        $(location).attr('href',$(this).val());
+})
+
 function getPoints(){
     $.ajax({
                     type: "GET",
