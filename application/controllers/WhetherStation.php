@@ -3,9 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class WhetherStation extends CI_Controller {
 
-	private $scripts_loc=array(
-		'assets/Extra/Stations/AddStation.js',
-	);
+	
+
 
 	function __construct() { 
          parent::__construct(); 
@@ -24,22 +23,56 @@ class WhetherStation extends CI_Controller {
 
 	public function editStation(){
 		$code = " stationID=\"". $this->input->get('Code')."\"";
-		$this->load->model("database_model");
-        $this->data['station'] = $this->database_model->getAllDataWithParams("tstations","stationID, name, location, coordinates, owner_name,owner_address, owner_email, owner_mobile",$code);
-        $this->load->view('WhetherStation/editStation',$this->data);	              
+		$this->load->model("database_model");	              
 
-	}
-
-	public function newStation(){
+		$scripts_loc=array(
+			'assets/plugins/switchery/switchery.min.js',
+			'assets/plugins/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js',
+			'assets/plugins/jquery-quicksearch/jquery.quicksearch.js',
+			'assets/plugins/moment/moment.js',
+			'assets/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js',
+			'assets/Extra/Stations/EditStation.js'
+		);
 
 		$this->load->helper('url');
 		$data['title'] ="New Station";
-		$data['scripts'] = $this->scripts_loc;
+		$data['scripts'] = $scripts_loc;
+		$data['station'] = $this->database_model->getAllDataWithParams("tstations","stationID, name, location, coordinates, owner_name,owner_address, owner_email, owner_mobile",$code);
 
 		if(!$this->getUserSessionEnabled()){
 			redirect(base_url().'Login');	
 		}else{
 			
+			$this->load->view('Templete/header.php',$data);
+			$this->load->view('Templete/title.php');
+			$this->load->view('Templete/left_slide.php');
+			$this->load->view('WhetherStation/editStation.php');
+			$this->load->view('Templete/footer.php');
+		}
+	}
+
+	public function newStation(){
+
+		$this->load->helper('url');
+
+
+		$scripts_loc=array(
+			'assets/Extra/Stations/AddStation.js',
+			'assets/plugins/switchery/switchery.min.js',
+			'assets/plugins/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js',
+			'assets/plugins/jquery-quicksearch/jquery.quicksearch.js',
+			'assets/plugins/moment/moment.js',
+			'assets/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js',
+		);
+
+		$data['title'] ="New Station";
+		$data['scripts'] = $scripts_loc;
+
+		if(!$this->getUserSessionEnabled()){
+			redirect(base_url().'Login');	
+		}else{
+			
+
 			$this->load->view('Templete/header.php',$data);
 			$this->load->view('Templete/title.php');
 			$this->load->view('Templete/left_slide.php');
@@ -100,7 +133,8 @@ class WhetherStation extends CI_Controller {
 		$this->Station_Model->setStationName($this->input->post('txtStationName'));
 		$this->Station_Model->setStationLocation($this->input->post('txtLocation'));
 
-		$coord = "{\"Lat\":\"".$this->input->post('txtCoordinatesLat')."\",\"Lng\":\"".$this->input->post('txtCoordinatesLng')."\"}";
+		$coord = "{\"lat\":\"".$this->input->post('txtCoordinatesLat')."\",\"lng\":\"".$this->input->post('txtCoordinatesLng')."\"}";
+		
 		$this->Station_Model->setStationCoordinates($coord);
 		$this->Station_Model->setOwnername($this->input->post('txtOwnerName'));
 		$this->Station_Model->setOwnerAddress($this->input->post('txtAddress'));
@@ -120,49 +154,51 @@ class WhetherStation extends CI_Controller {
 					
 	}
 	// update station loadWhetherDetails
-	public function UpdateStation(){
+	public function updateStation(){
 
 		$this->load->model("Station_Model");
 		$this->load->model("database_model");
 		// set data
 		
-		$this->station_model->setStationCode($this->input->post('txtStationCode'));
-		$this->station_model->setStationName($this->input->post('txtStationName'));
-		$this->station_model->setStationLocation($this->input->post('txtLocation'));
-		$this->station_model->setStationCoordinates($this->input->post('txtCoordinates'));
-		$this->station_model->setOwnername($this->input->post('txtOwnerName'));
-		$this->station_model->setOwnerAddress($this->input->post('txtAddress'));
-		$this->station_model->setOwnerEmail($this->input->post('txtemail'));
-		$this->station_model->setOwnerMobile($this->input->post('txtMobile'));
-		$this->station_model->setActive(0);
+		$this->Station_Model->setStationCode($this->input->post('txtStationCode'));
+		$this->Station_Model->setStationName($this->input->post('txtStationName'));
+		$this->Station_Model->setStationLocation($this->input->post('txtLocation'));
+		$this->Station_Model->setStationCoordinates($this->input->post('txtCoordinates'));
+		$this->Station_Model->setOwnername($this->input->post('txtOwnerName'));
+		$this->Station_Model->setOwnerAddress($this->input->post('txtAddress'));
+		$this->Station_Model->setOwnerEmail($this->input->post('txtemail'));
+		$this->Station_Model->setOwnerMobile($this->input->post('txtMobile'));
+		$this->Station_Model->setActive(0);
 
 		
-		$data = $this->station_model->toArray();
+		$data = $this->Station_Model->toArray();
 		$parm =$this->input->post('txtStationCode');
 		$ret = $this->database_model->updateStation($data,$parm);
 
 		// crete table for the GUID 
 
 		if($ret==true)
-			echo "Station Code : " . $this->station_model->getStationCode();
+			echo "Station Code : " . $this->Station_Model->getStationCode();
 		else
-			echo "number : " . $this->station_model->getStationCode();
+			echo "number : " . $this->Station_Model->getStationCode();
 	}
 	// delete addStation
 	
-	public function DeleteStation(){
+	public function deleteStation(){
 
 		$this->load->model("Station_Model");
 		$this->load->model("database_model");
+
 		$parm =$this->input->post('txtStationCode');
+
 		$ret = $this->database_model->DeleteStation($parm);
 
 		// crete table for the GUID 
 
 		if($ret==true)
-			echo "Station Code : " . $this->station_model->getStationCode();
+			echo "Station Code : " . $parm;
 		else
-			echo "number : " . $this->station_model->getStationCode();
+			echo "number : " . $parm;
 	}
 	// get parameters
 	public function getPrmeterList(){

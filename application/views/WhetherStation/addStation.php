@@ -58,9 +58,9 @@
                                                 <div class="form-group">
 	                                                <label class="col-md-3 control-label">Coordinates</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" id="txtCoordinatesLat" name="txtCoordinates" class="form-control" placeholder="Latitude">
+                                                        <input type="text" id="txtCoordinatesLat" name="txtCoordinatesLat" class="form-control" placeholder="Latitude">
                                                         <br>
-                                                        <input type="text" id="txtCoordinatesLng" name="txtCoordinates" class="form-control" placeholder="Longitude">
+                                                        <input type="text" id="txtCoordinatesLng" name="txtCoordinatesLng" class="form-control" placeholder="Longitude">
                                                    </div>  
                                                     
 	                                            </div>

@@ -20,6 +20,8 @@
         <link href="<?php echo $code_url;?>assets/css/pages.css" rel="stylesheet" type="text/css" type="text/css"/>
         <link href="<?php echo $code_url;?>assets/css/menu.css" rel="stylesheet" type="text/css" type="text/css"/>
         <link href="<?php echo $code_url;?>assets/css/responsive.css" rel="stylesheet" type="text/css" type="text/css"/>
+        
+       
         <!-- Circlifull chart css -->
         <link href="<?php echo $code_url;?>assets/plugins/jquery-circliful/css/jquery.circliful.css" rel="stylesheet" type="text/css"/>
 
