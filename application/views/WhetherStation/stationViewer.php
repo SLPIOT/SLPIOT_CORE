@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
     
-<!-- Mirrored from coderthemes.com/adminto_1.2/dark/form-elements.html by HTTrack Website Copier/3.x [XR&CO'2013], Tue, 14 Jun 2016 06:42:01 GMT -->
 <head>
         <meta charset="utf-8">
 
@@ -90,7 +89,7 @@
                             </li>
                             <li class="hidden-xs">
                                 <form role="search" class="app-search">
-                                    <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="dtsearch">
+                                    <input type="text" class="form-control input-daterange-datepicker" id="dtsearch">
                                     <a id="cmdSearch"><i class="fa fa-search"></i></a>
                                 </form>
                             </li>
@@ -117,7 +116,6 @@
                             <li class="has_sub">
                                  <a href="javascript:void(0);" class="waves-effect active"><i class="zmdi zmdi-collection-text"></i><span class="label label-warning pull-right">2</span><span> Station Details </span> <span class="menu-arrow"></span></a>
                                 <ul class="list-unstyled">
-                                    <li><a href="newStation">Add Station</a></li>
                                     <li><a href="viewStation">View Station</a></li>
                                 </ul>
                             </li>
@@ -243,24 +241,6 @@
                 <div class="content">
                     <div class="container">
 
-                    <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card-box">
-
-                                    <h4 class="header-title m-t-0 m-b-30">Combine Statistics</h4>
-
-                                    <div id="combine-chart">
-                                        <div id="combine-chart-container" class="flot-chart" style="height: 320px;">
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div><!-- end col-->
-
-                        </div>
-                        <!-- end row -->
-
-
                         <div class="row">
                         	<div class="col-sm-12">
                         		<div class="card-box">
@@ -274,33 +254,28 @@
                                         <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">
                                             <i class="zmdi zmdi-more-vert"></i>
                                         </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="<?php base_url();?>newStation">New</a></li>
-                                            <li><a href="<?php base_url();?>viewStation">Back</a></li>
-                                        </ul>
                                     </div>
                                     <!-- end of Action bar-->
 
                                     <div class="row">
                             <div class="col-sm-12">
                                 <div class="card-box table-responsive">
-                                    
+                                    <button type="button" align="right" class="btn btn-success btn-bordred waves-effect w-md waves-light m-b-5" id="cmdAvg" >Avarage to Date</button>
                                     <table id="datatable-buttons" class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
                                                 <th>Record Time</th>
-                                                <th>Humidity</th>
-                                                <th>External Temperature</th>
-                                                <th>Internal Temperature</th>
-                                                <th>Intensity</th>
-                                                <th>Win Direction</th>
-                                                <th>Win Speed</th>
-                                                <th>Rain Gauge</th>
-                                                <th>Altitude</th>
-                                                <th>Pressure</th>
-                                                <th>Soil Moisture</th>
-                                                <th>Batt</th>
+                                                <th>Relative Humidity %</th>
+                                                <th>External Temperature (&deg;C)</th>
+                                                <th>Internal Temperature(&deg;C)</th>
+                                                <th>Light Intensity (lux)</th>
+                                                <th>Wind Direction</th>
+                                                <th>Wind Speed(mps)</th>
+                                                <th>Rain Gauge(mm per 10 min)</th>
+                                                <th>Pressure(pa)</th>
+                                                <th>Soil Moisture %</th>
+                                                <th>Battery (V)</th>
                                             </tr>
                                         </thead>
 
@@ -312,15 +287,13 @@
                                                         <td><?php echo $data->Humidity;?></td>
                                                         <td><?php echo $data->Ext_temp;?></td>
                                                         <td><?php echo $data->Int_temp;?></td>
-                                                        <td><?php echo $data->Intensity;?></td>
-                                                        <td><?php echo $data->Win_dir;?></td>
+                                                        <td><?php if($data->Intensity<54600)echo ($data->Intensity);else echo "UC";?></td>
+                                                        <td><?php echo round($data->Win_dir,0);?></td>
                                                         <td><?php echo $data->Win_speed;?></td>
                                                         <td><?php echo $data->Rain_gauge;?></td>
-                                                        <td><?php echo $data->Altitude;?></td>
                                                         <td><?php echo $data->Pressure;?></td>
                                                         <td><?php echo $data->Soil_Moisture;?></td>
                                                         <td><?php echo $data->Batt;?></td>
-                                                        
                                                     </tr>    
                                              <?php }?> 
                                         </tbody>
@@ -329,7 +302,6 @@
                             </div><!-- end col -->
                         </div>
                         <!-- end row -->
-                        <div id="website-stats" style="height: 320px;" class="flot-chart"></div>
 
                         		</div>
                         	</div><!-- end col -->
@@ -383,17 +355,9 @@
         <script src="../assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" type="text/javascript"></script>
      	<script src="../assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
-
-        <script src="../assets/plugins/flot-chart/jquery.flot.js"></script>
-        <script src="../assets/plugins/flot-chart/jquery.flot.time.js"></script>
-        <script src="../assets/plugins/flot-chart/jquery.flot.tooltip.min.js"></script>
-        <script src="../assets/plugins/flot-chart/jquery.flot.resize.js"></script>
-        <script src="../assets/plugins/flot-chart/jquery.flot.pie.js"></script>
-        <script src="../assets/plugins/flot-chart/jquery.flot.selection.js"></script>
-        <script src="../assets/plugins/flot-chart/jquery.flot.stack.js"></script>
-        <script src="../assets/plugins/flot-chart/jquery.flot.crosshair.js"></script>
-
-        <script src="../assets/pages/jquery.flot.init.js"></script>
+        <!-- App js -->
+        <script src="../assets/js/jquery.core.js"></script>
+        <script src="../assets/js/jquery.app.js"></script>
 
         <!-- Datatables-->
         <script src="../assets/plugins/datatables/jquery.dataTables.min.js"></script>
@@ -410,11 +374,8 @@
         <script src="../assets/plugins/datatables/dataTables.responsive.min.js"></script>
         <script src="../assets/plugins/datatables/responsive.bootstrap.min.js"></script>
         <script src="../assets/plugins/datatables/dataTables.scroller.min.js"></script>
-
-        
-        <!-- App js -->
-        <script src="../assets/js/jquery.core.js"></script>
-        <script src="../assets/js/jquery.app.js"></script>                                        
+        <script src="../assets/js/custom.js"></script>
+        <script src="../assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
 
         <!-- Datatable init js -->
         <script src="../assets/pages/datatables.init.js"></script>
@@ -432,7 +393,7 @@
                 if(mm<10){
                     mm='0'+mm;
                 } 
-                var today = yyyy+'/'+mm+'/'+dd;
+                var today = yyyy+'/'+mm+'/'+dd +'-'+yyyy+'/'+mm+'/'+dd;
                 $('#dtsearch').val($.urlParam('date'));
 
                 $('#datatable').dataTable();
@@ -453,6 +414,13 @@
                     
                     window.location.href='loadWhetherDetails?Code='+v+'&date='+c;
                 });
+                
+                $('#cmdAvg').click(function(){
+                    var c = $('#dtsearch').val();
+                    var v = $.urlParam('Code');
+                    
+                    window.location.href='loadAvgWhetherDetails?Code='+v+'&date='+c +'&rate=24';
+                });
             } );
             TableManageButtons.init();
             
@@ -465,15 +433,8 @@
                 return decodeURI(results[1]) || 0;
                 }
             }
-
-
-
-                
-
-
         </script>
     
     </body>
 
-<!-- Mirrored from coderthemes.com/adminto_1.2/dark/form-advanced.html by HTTrack Website Copier/3.x [XR&CO'2013], Tue, 14 Jun 2016 06:42:07 GMT -->
 </html>

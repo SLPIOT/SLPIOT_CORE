@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
     
-<!-- Mirrored from coderthemes.com/adminto_1.2/dark/form-elements.html by HTTrack Website Copier/3.x [XR&CO'2013], Tue, 14 Jun 2016 06:42:01 GMT -->
 <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Weather Station Data Collector. Real time analizis">
+        <meta name="author" content="Coderthemes">
 
         <!-- App Favicon -->
         <link rel="shortcut icon" href="../assets/images/favicon.ico">
 
         <!-- App title -->
-        <title>Whether Station</title>
+        <title>Weather Station</title>
 
         <!-- App CSS -->
         <link href="../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -70,7 +72,7 @@
                                 </button>
                             </li>
                             <li>
-                                <h4 class="page-title">View Whether Station</h4>
+                                <h4 class="page-title">View Weather Station</h4>
                             </li>
                         </ul>
 
@@ -111,7 +113,6 @@
                             <li class="has_sub">
                                  <a href="javascript:void(0);" class="waves-effect active"><i class="zmdi zmdi-collection-text"></i><span class="label label-warning pull-right">2</span><span> Station Details </span> <span class="menu-arrow"></span></a>
                                 <ul class="list-unstyled">
-                                    <li><a href="newStation">Add Station</a></li>
                                     <li><a href="viewStation">View Station</a></li>
                                 </ul>
                             </li>
@@ -251,7 +252,6 @@
                                             <i class="zmdi zmdi-more-vert"></i>
                                         </a>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a href="<?php base_url();?>newStation">New</a></li>
                                             <li><a href="#">Delete</a></li>
                                         </ul>
                                     </div>
@@ -275,7 +275,7 @@
                                                         <td><?php echo $station->stationID;?></td>
                                                         <td><?php echo $station->name;?></td>
                                                         <td><?php echo $station->location;?></td>
-                                                        <td><a class="btn btn-primary waves-effect w-md waves-light m-b-5" href='<?php echo (base_url()."WhetherStation/loadWhetherDetails?Code=".$station->stationID.'&date='.date('Y/m/d')); ?>'>View</a></td>
+                                                        <td><a class="btn btn-primary waves-effect w-md waves-light m-b-5" href='<?php echo (base_url()."WhetherStation/loadWhetherDetails?Code=".$station->stationID.'&date='.date('Y/m/d').'-'.date('Y/m/d')); ?>'>View</a></td>
                                                         <td><a class="btn btn-primary waves-effect w-md waves-light m-b-5" href='<?php echo base_url().'WhetherStation/editStation?Code='.$station->stationID; ?>'>Edit</a></td>
                                                     </tr>    
                                                 <?php }?> 
@@ -354,5 +354,4 @@
     
     </body>
 
-<!-- Mirrored from coderthemes.com/adminto_1.2/dark/form-advanced.html by HTTrack Website Copier/3.x [XR&CO'2013], Tue, 14 Jun 2016 06:42:07 GMT -->
 </html>

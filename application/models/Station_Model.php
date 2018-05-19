@@ -103,7 +103,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 "owner_address" => $this->ownerAddress, 
                 "owner_email" => $this->ownerEmail,
                 "owner_mobile" => $this->ownermobile, 
-                "is_active" => $this->isActive, 
+                "is_active" => 0, 
             );
             return $datav;
       }

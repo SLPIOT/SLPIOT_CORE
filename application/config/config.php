@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/slpiot_web/';
+$config['base_url'] = "http://localhost/slpiot_web/";//"http://slpiot.org/";
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +35,7 @@ $config['base_url'] = 'http://localhost/slpiot_web/';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'DashBoard';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------

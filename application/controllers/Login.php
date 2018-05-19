@@ -20,6 +20,7 @@ class Login extends CI_Controller {
 
 	public function index()
 	{
+	
         if(isset($this->session->userdata['logged_in'])){
             redirect(base_url().'Dashboard');
         }else{
@@ -40,8 +41,9 @@ class Login extends CI_Controller {
             $this->session->userdata['logged_in'] =true;
             $this->session->userdata['userid'] = $usermodel->getUserID();
             $this->session->userdata['username'] = $usermodel->getUsername();
-
-            redirect(base_url().'Dashboard');
+            $this->session->userdata['usertype'] = $usermodel->getUsertype();
+            
+            redirect(base_url());
         }
     }
 
@@ -52,8 +54,8 @@ class Login extends CI_Controller {
 		$data['scripts'] = $this->scripts_loc;
 
         $this->load->view('Templete/header.php',$data);
-		$this->load->view('Login/Login');
-		$this->load->view('Templete/footer.php',$data);
+	$this->load->view('Login/login.php');
+	$this->load->view('Templete/footer.php',$data);
     }
     
     public function signout(){

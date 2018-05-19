@@ -3,6 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class WhetherStation extends CI_Controller {
 
+	private $scripts_loc=array(
+		'assets/Extra/Stations/AddStation.js',
+	);
+
 	function __construct() { 
          parent::__construct(); 
 		 $this->load->database();
@@ -27,7 +31,21 @@ class WhetherStation extends CI_Controller {
 	}
 
 	public function newStation(){
-		$this->load->view('WhetherStation/addStation');
+
+		$this->load->helper('url');
+		$data['title'] ="New Station";
+		$data['scripts'] = $this->scripts_loc;
+
+		if(!$this->getUserSessionEnabled()){
+			redirect(base_url().'Login');	
+		}else{
+			
+			$this->load->view('Templete/header.php',$data);
+			$this->load->view('Templete/title.php');
+			$this->load->view('Templete/left_slide.php');
+			$this->load->view('WhetherStation/addStation.php');
+			$this->load->view('Templete/footer.php');
+		}	
 	}
 
 	public function viewStation(){
@@ -38,46 +56,76 @@ class WhetherStation extends CI_Controller {
 	}
 
 	public function loadWhetherDetails(){
-		$code = " stationID=\"". $this->input->get('Code')."\" AND Record_time between \"".$this->input->get('date')." 00:00:00\" AND \"".$this->input->get('date')." 23:59:59\"";
+		
+		$daterange = explode("-",$this->input->get('date'));
+		$startdate = date("Y-m-d", strtotime($daterange[0]));
+		$enddate = date("Y-m-d", strtotime($daterange[1]));
+		$code = " stationID=\"". $this->input->get('Code')."\" AND Record_time between \"".$startdate ." 00:00:00\" AND \"".$enddate." 23:59:00\"";
+		//echo $code ;
 		$this->load->model("database_model");
-        $this->data['data_stream'] = $this->database_model->getAllDataWithParams ("Data_Stream","ID,Record_time,Humidity,Ext_temp,Int_temp,Intensity,Win_dir,Win_speed,Rain_gauge,,Altitude,Pressure,Soil_Moisture,Batt",$code);
+        	$this->data['data_stream'] = $this->database_model->getAllDataWithParams ("data_stream","ID,Record_time,Humidity,Ext_temp,Int_temp,Intensity,Win_dir,Win_speed,Rain_gauge,,Altitude,Pressure,Soil_Moisture,Water_level,Batt,istsos",$code);
 		$this->load->view('WhetherStation/stationViewer',$this->data);
+	}
+	
+	public function loadAvgWhetherDetails(){
+		
+		$daterange = explode("-",$this->input->get('date'));
+		$rate = $this->input->get('rate');
+		$startdate = date("Y-m-d", strtotime($daterange[0]));
+		$enddate = date("Y-m-d", strtotime($daterange[1]));
+		$code = " stationID=\"". $this->input->get('Code')."\" AND Record_time between \"".$startdate ." 00:00:00\" AND \"".$enddate." 23:59:59\" Group by floor(hour(Record_time) / ".$rate.")";
+		//echo $code ;
+		$this->load->model("database_model");
+        	$this->data['data_stream'] = $this->database_model->getAllDataWithParams 		
+                                                                               ("data_stream","ID,Record_time AS Record_time,
+                                                                               ROUND(AVG(Humidity),4) AS Humidity,
+                                                                               ROUND(AVG(Ext_temp),4) AS Ext_temp,
+                                                                               ROUND(AVG(Int_temp),4) AS Int_temp,
+                                                                               ROUND(AVG(Intensity),4) AS Intensity,
+                                                                               ROUND(AVG(Win_dir),4) AS Win_dir,
+                                                                               ROUND(AVG(Win_speed),4) AS Win_speed,
+                                                                               ROUND(SUM(Rain_gauge),4) AS Rain_gauge,
+                                                                               ROUND(AVG(Pressure),4) AS Pressure,
+                                                                               ROUND(AVG(Soil_Moisture),4) AS Soil_Moisture,
+                                                                               AVG(Batt) AS Batt ",$code);
+		$this->load->view('WhetherStation/stationViewerAvg',$this->data);
 	}
 
 	public function addStation(){
-
 		
-		$this->load->model("station_model");
+		$this->load->model("Station_Model");
 		$this->load->model("database_model");
 		// set data
-		$this->station_model->setStationCode($this->input->post('txtStationCode'));
-		$this->station_model->setStationName($this->input->post('txtStationName'));
-		$this->station_model->setStationLocation($this->input->post('txtLocation'));
-		$this->station_model->setStationCoordinates($this->input->post('txtCoordinates'));
-		$this->station_model->setOwnername($this->input->post('txtOwnerName'));
-		$this->station_model->setOwnerAddress($this->input->post('txtAddress'));
-		$this->station_model->setOwnerEmail($this->input->post('txtemail'));
-		$this->station_model->setOwnerMobile($this->input->post('txtMobile'));
-		$this->station_model->setActive(0);
+		$this->Station_Model->setStationCode($this->input->post('txtStationCode'));
+		$this->Station_Model->setStationName($this->input->post('txtStationName'));
+		$this->Station_Model->setStationLocation($this->input->post('txtLocation'));
+
+		$coord = "{\"Lat\":\"".$this->input->post('txtCoordinatesLat')."\",\"Lng\":\"".$this->input->post('txtCoordinatesLng')."\"}";
+		$this->Station_Model->setStationCoordinates($coord);
+		$this->Station_Model->setOwnername($this->input->post('txtOwnerName'));
+		$this->Station_Model->setOwnerAddress($this->input->post('txtAddress'));
+		$this->Station_Model->setOwnerEmail($this->input->post('txtemail'));
+		$this->Station_Model->setOwnerMobile($this->input->post('txtMobile'));
+		$this->Station_Model->setActive(0);
 
 		
-		$data = $this->station_model->toArray();
+		$data = $this->Station_Model->toArray();
 		$ret = $this->database_model->insertStation($data);
 
 		// crete table for the GUID 
-
-		if($ret==true)
-			echo "Station Code : " . $this->station_model->getStationCode();
+		if($ret == true)
+			echo "Station Code : " . $this->input->post('txtStationCode');
 		else
-			echo "number : " . $this->station_model->getStationCode();
+			echo "number : " . $this->input->post('txtStationCode');
 					
 	}
 	// update station loadWhetherDetails
 	public function UpdateStation(){
 
-		$this->load->model("station_model");
+		$this->load->model("Station_Model");
 		$this->load->model("database_model");
 		// set data
+		
 		$this->station_model->setStationCode($this->input->post('txtStationCode'));
 		$this->station_model->setStationName($this->input->post('txtStationName'));
 		$this->station_model->setStationLocation($this->input->post('txtLocation'));
@@ -104,7 +152,7 @@ class WhetherStation extends CI_Controller {
 	
 	public function DeleteStation(){
 
-		$this->load->model("station_model");
+		$this->load->model("Station_Model");
 		$this->load->model("database_model");
 		$parm =$this->input->post('txtStationCode');
 		$ret = $this->database_model->DeleteStation($parm);
@@ -127,5 +175,13 @@ class WhetherStation extends CI_Controller {
 		}	
 		$str=$str . "}";
 		echo $str;
+	}
+
+	private function getUserSessionEnabled(){
+		if(isset($this->session->userdata['logged_in'])){
+			return true;
+		}else{
+			return false;
+		}
 	}
 }

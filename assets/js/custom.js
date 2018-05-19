@@ -150,7 +150,7 @@ jQuery(document).ready(function() {
             });
             $('.input-daterange-timepicker').daterangepicker({
                 timePicker: true,
-                format: 'MM/DD/YYYY h:mm A',
+                format: 'YYYY/MM/DD h:mm A',
                 timePickerIncrement: 30,
                 timePicker12Hour: true,
                 timePickerSeconds: false,
