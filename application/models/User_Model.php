@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         }
 
         public function login($username_, $password_){
-            //$this->load->database();
+            $this->load->database();
             $this->load->model("database_model");
             $this->data = $this->database_model->getUserInformation($username_,$password_);
 

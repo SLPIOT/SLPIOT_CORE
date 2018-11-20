@@ -97,7 +97,7 @@ class WhetherStation extends CI_Controller {
 		$code = " stationID=\"". $this->input->get('Code')."\" AND Record_time between \"".$startdate ." 00:00:00\" AND \"".$enddate." 23:59:00\"";
 		//echo $code ;
 		$this->load->model("database_model");
-        	$this->data['data_stream'] = $this->database_model->getAllDataWithParams ("data_stream","ID,Record_time,Humidity,Ext_temp,Int_temp,Intensity,Win_dir,Win_speed,Rain_gauge,,Altitude,Pressure,Soil_Moisture,Water_level,Batt,istsos",$code);
+        	$this->data['data_stream'] = $this->database_model->getAllDataWithParams ("data_stream","ID,Record_time,Humidity,Ext_temp,Int_temp,Intensity,Win_dir,Win_speed,Rain_gauge,,Altitude,Pressure,Soil_Moisture,Water_Level,Batt,istsos",$code);
 		$this->load->view('WhetherStation/stationViewer',$this->data);
 	}
 	
@@ -120,7 +120,8 @@ class WhetherStation extends CI_Controller {
                                                                                ROUND(AVG(Win_speed),4) AS Win_speed,
                                                                                ROUND(SUM(Rain_gauge),4) AS Rain_gauge,
                                                                                ROUND(AVG(Pressure),4) AS Pressure,
-                                                                               ROUND(AVG(Soil_Moisture),4) AS Soil_Moisture,
+																			   ROUND(AVG(Soil_Moisture),4) AS Soil_Moisture,
+																			   ROUND(AVG(Water_Level),4) AS Water_Level,
                                                                                AVG(Batt) AS Batt ",$code);
 		$this->load->view('WhetherStation/stationViewerAvg',$this->data);
 	}

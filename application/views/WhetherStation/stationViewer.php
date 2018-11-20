@@ -275,6 +275,7 @@
                                                 <th>Rain Gauge(mm per 10 min)</th>
                                                 <th>Pressure(pa)</th>
                                                 <th>Soil Moisture %</th>
+                                                <th>Water Level</th>
                                                 <th>Battery (V)</th>
                                             </tr>
                                         </thead>
@@ -294,6 +295,7 @@
                                                         <td><?php echo $data->Rain_gauge;?></td>
                                                         <td><?php echo $data->Pressure;?></td>
                                                         <td><?php echo $data->Soil_Moisture;?></td>
+                                                        <td><?php echo $data->Water_Level;?></td>
                                                         <td><?php echo $data->Batt;?></td>
                                                     </tr>    
                                              <?php }?> 
