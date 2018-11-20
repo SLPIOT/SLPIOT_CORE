@@ -282,6 +282,7 @@
                                         <tbody>
                                             <?php foreach($data_stream as $data){?>
                                                     <tr>
+                                                        
                                                         <td><?php echo $data->ID;?></td>
                                                         <td><?php echo $data->Record_time;?></td>
                                                         <td><?php echo $data->Humidity;?></td>

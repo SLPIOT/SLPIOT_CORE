@@ -10,12 +10,12 @@ class Api extends CI_Controller {
     public function index()
     {
 	$this->load->database();
-	}
+    }
 
     // http://slpiot.org/api/getLatestRecordForLCD/Id
     
-    public function getLatestRecordForLCD($displayID){
-    	$stid = 'e13ed2f7-c046-47';
+    public function getLatestRecordForLCD(){
+    	$stid = '89379a9b-66a1-6a';
     	$this->load->model('database_model');
         $res = $this->database_model->getLatestRecord($stid);
 		echo json_encode($res);

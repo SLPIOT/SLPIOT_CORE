@@ -112,6 +112,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		    return $this->database_model->getAllDataWithParams ("data_stream","Record_time,Humidity,Ext_temp,Int_temp,Intensity,Win_dir,Win_speed,Rain_gauge,Pressure,Soil_Moisture",$code); 
 
       }
+
+      
       
       function getLatestRecordsinFields($stationID,$name_){
       

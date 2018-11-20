@@ -112,6 +112,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		    return $this->database_model->getAllDataWithParams ("data_stream","Record_time,Humidity,Ext_temp,Int_temp,Intensity,Win_dir,Win_speed,Rain_gauge,Pressure,Soil_Moisture",$code); 
 
       }
+      
+      function getLatestRecord($stationID){
+        $code = " stationID=\"". $stationID."\" ORDER BY Record_time DESC  Limit 0,1";
+		    return $this->database_model->getAllDataWithParams ("data_stream","Record_time,Humidity,Ext_temp,Int_temp,Intensity,Win_dir,Win_speed,Rain_gauge,Pressure,Soil_Moisture",$code); 
+
+      }
 
       function getLatestRecordTime($stationID){
         $code = " stationID=\"". $stationID."\" ORDER BY Record_time DESC  Limit 0,1";

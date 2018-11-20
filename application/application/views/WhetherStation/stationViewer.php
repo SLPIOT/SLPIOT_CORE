@@ -3,15 +3,12 @@
     
 <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Weather Station Data Collector. Real time analizis">
-        <meta name="author" content="Coderthemes">
 
         <!-- App Favicon -->
         <link rel="shortcut icon" href="../assets/images/favicon.ico">
 
         <!-- App title -->
-        <title>Weather Station</title>
+        <title>Whether Station</title>
 
         <!-- App CSS -->
         <link href="../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -23,6 +20,12 @@
         <link href="../assets/css/responsive.css" rel="stylesheet" type="text/css" />
         <link href="../assets/css/customStyles.css" rel="stylesheet" type="text/css">
 
+        <!-- DataTables -->
+        <link href="../assets/plugins/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+        <link href="../assets/plugins/datatables/buttons.bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="../assets/plugins/datatables/fixedHeader.bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="../assets/plugins/datatables/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="../assets/plugins/datatables/scroller.bootstrap.min.css" rel="stylesheet" type="text/css" />
 
 
         <link href="../assets/plugins/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet" />
@@ -35,6 +38,7 @@
 		<link href="../assets/plugins/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
 		<link href="../assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet">
 		<link href="../assets/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+		<link href="../assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet">
         
 
         <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -72,7 +76,7 @@
                                 </button>
                             </li>
                             <li>
-                                <h4 class="page-title">View Weather Station</h4>
+                                <h4 class="page-title" >View Whether Station</h4>
                             </li>
                         </ul>
 
@@ -85,9 +89,8 @@
                             </li>
                             <li class="hidden-xs">
                                 <form role="search" class="app-search">
-                                    <input type="text" placeholder="Search..."
-                                           class="form-control">
-                                    <a href="#"><i class="fa fa-search"></i></a>
+                                    <input type="text" class="form-control input-daterange-datepicker" id="dtsearch">
+                                    <a id="cmdSearch"><i class="fa fa-search"></i></a>
                                 </form>
                             </li>
                         </ul>
@@ -229,15 +232,6 @@
             </div>
             <!-- Left Sidebar End -->
 
-            <?php
-                function isOnline($stid){
-
-                    $response = file_get_contents(base_url().'api/isOnline/'.$stid);
-                    //echo $response;
-                    return $response;
-                }
-            ?>
-
             <!-- ============================================================== -->
             <!-- Start right Content here -->
             <!-- ============================================================== -->
@@ -260,47 +254,54 @@
                                         <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">
                                             <i class="zmdi zmdi-more-vert"></i>
                                         </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#">Delete</a></li>
-                                        </ul>
                                     </div>
                                     <!-- end of Action bar-->
 
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <thead>
+                                    <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card-box table-responsive">
+                                    <button type="button" align="right" class="btn btn-success btn-bordred waves-effect w-md waves-light m-b-5" id="cmdAvg" >Avarage to Date</button>
+                                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                                        <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Status</th>
-                                                <th>Station Code</th>
-                                                <th>Station Name</th>
-                                                <th>Location</th>
-                                                <th></th>
+                                                <th>Record Time</th>
+                                                <th>Relative Humidity %</th>
+                                                <th>External Temperature (&deg;C)</th>
+                                                <th>Internal Temperature(&deg;C)</th>
+                                                <th>Light Intensity (lux)</th>
+                                                <th>Wind Direction</th>
+                                                <th>Wind Speed(mps)</th>
+                                                <th>Rain Gauge(mm per 10 min)</th>
+                                                <th>Pressure(pa)</th>
+                                                <th>Soil Moisture %</th>
+                                                <th>Battery (V)</th>
                                             </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php foreach($stations as $station){?>
+                                        </thead>
+
+                                        <tbody>
+                                            <?php foreach($data_stream as $data){?>
                                                     <tr>
-                                                        
-                                                        <td><?php echo $station->ID; ?></td>
-                                                        
-                                                        <td>  
-                                                       <div class="checkbox checkbox-success checkbox-circle">
-                                                            <input id="checkbox-10" type="checkbox"  <?php if(isOnline($station->stationID)==true) echo 'checked'?>>
-                                                            <label for="checkbox-10">
-                                                            </label>
-                                                        </div> 
-                                                        </td>
-                                                        <td><?php echo $station->stationID;?></td>
-                                                        <td><?php echo $station->name;?></td>
-                                                        <td><?php echo $station->location;?></td>
-                                                        <td><a class="btn btn-primary waves-effect w-md waves-light m-b-5" href='<?php echo (base_url()."WhetherStation/loadWhetherDetails?Code=".$station->stationID.'&date='.date('Y/m/d').'-'.date('Y/m/d')); ?>'>View</a></td>
-                                                        <td><a class="btn btn-primary waves-effect w-md waves-light m-b-5" href='<?php echo base_url().'WhetherStation/editStation?Code='.$station->stationID; ?>'>Edit</a></td>
+                                                        <td><?php echo $data->ID;?></td>
+                                                        <td><?php echo $data->Record_time;?></td>
+                                                        <td><?php echo $data->Humidity;?></td>
+                                                        <td><?php echo $data->Ext_temp;?></td>
+                                                        <td><?php echo $data->Int_temp;?></td>
+                                                        <td><?php if($data->Intensity<54600)echo ($data->Intensity);else echo "UC";?></td>
+                                                        <td><?php echo round($data->Win_dir,0);?></td>
+                                                        <td><?php echo $data->Win_speed;?></td>
+                                                        <td><?php echo $data->Rain_gauge;?></td>
+                                                        <td><?php echo $data->Pressure;?></td>
+                                                        <td><?php echo $data->Soil_Moisture;?></td>
+                                                        <td><?php echo $data->Batt;?></td>
                                                     </tr>    
-                                                <?php }?> 
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                             <?php }?> 
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div><!-- end col -->
+                        </div>
+                        <!-- end row -->
 
                         		</div>
                         	</div><!-- end col -->
@@ -315,28 +316,7 @@
             <!-- /Right-bar -->
         </div>
         <!-- END wrapper -->
-    
-        <script type="text/javascript">
 
-            
-
-            function loadStation(element){
-                //var id = $(el).attr('value');
-                //alert(element);
-               // window.location.reload('http://www.theuntappedsource.com/results.php?category=422');
-                
-                document.location.replace("https://www.google.lk/",true);
-                return false;
-            }
-
-            function isOnline($stationID_){
-                var isOnlineAPI = '<?php echo base_url().'api/isOnline/'.$stationID_;?>';
-                $.getJSON(apiUrl,function(json){
-                    console.log(json);
-                }
-            }
-
-        </script>
 
 
          <script>
@@ -373,12 +353,87 @@
      	<script src="../assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
      	<script src="../assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
         <script src="../assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js" type="text/javascript"></script>
+     	<script src="../assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
         <!-- App js -->
         <script src="../assets/js/jquery.core.js"></script>
         <script src="../assets/js/jquery.app.js"></script>
 
-        
+        <!-- Datatables-->
+        <script src="../assets/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="../assets/plugins/datatables/dataTables.bootstrap.js"></script>
+        <script src="../assets/plugins/datatables/dataTables.buttons.min.js"></script>
+        <script src="../assets/plugins/datatables/buttons.bootstrap.min.js"></script>
+        <script src="../assets/plugins/datatables/jszip.min.js"></script>
+        <script src="../assets/plugins/datatables/pdfmake.min.js"></script>
+        <script src="../assets/plugins/datatables/vfs_fonts.js"></script>
+        <script src="../assets/plugins/datatables/buttons.html5.min.js"></script>
+        <script src="../assets/plugins/datatables/buttons.print.min.js"></script>
+        <script src="../assets/plugins/datatables/dataTables.fixedHeader.min.js"></script>
+        <script src="../assets/plugins/datatables/dataTables.keyTable.min.js"></script>
+        <script src="../assets/plugins/datatables/dataTables.responsive.min.js"></script>
+        <script src="../assets/plugins/datatables/responsive.bootstrap.min.js"></script>
+        <script src="../assets/plugins/datatables/dataTables.scroller.min.js"></script>
+        <script src="../assets/js/custom.js"></script>
+        <script src="../assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+        <!-- Datatable init js -->
+        <script src="../assets/pages/datatables.init.js"></script>
+
+         <script type="text/javascript">
+            $(document).ready(function() {
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth()+1; //January is 0!
+
+                var yyyy = today.getFullYear();
+                if(dd<10){
+                    dd='0'+dd;
+                } 
+                if(mm<10){
+                    mm='0'+mm;
+                } 
+                var today = yyyy+'/'+mm+'/'+dd +'-'+yyyy+'/'+mm+'/'+dd;
+                $('#dtsearch').val($.urlParam('date'));
+
+                $('#datatable').dataTable();
+                $('#datatable-keytable').DataTable( { keys: true } );
+                $('#datatable-responsive').DataTable();
+                $('#datatable-scroller').DataTable( { ajax: "assets/plugins/datatables/json/scroller-demo.json", deferRender: true, scrollY: 380, scrollCollapse: true, scroller: true } );
+                var table = $('#datatable-fixed-header').DataTable( { fixedHeader: true } );
+
+                $('#dtsearch').datepicker({
+                    format:'yyyy/mm/dd',
+                    autoclose: true
+                    
+                });
+
+                $('#cmdSearch').click(function(){
+                    var c = $('#dtsearch').val();
+                    var v = $.urlParam('Code');
+                    
+                    window.location.href='loadWhetherDetails?Code='+v+'&date='+c;
+                });
+                
+                $('#cmdAvg').click(function(){
+                    var c = $('#dtsearch').val();
+                    var v = $.urlParam('Code');
+                    
+                    window.location.href='loadAvgWhetherDetails?Code='+v+'&date='+c +'&rate=24';
+                });
+            } );
+            TableManageButtons.init();
+            
+            $.urlParam = function(name){
+                var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+                if (results==null){
+                return null;
+                }
+                else{
+                return decodeURI(results[1]) || 0;
+                }
+            }
+        </script>
     
     </body>
 
